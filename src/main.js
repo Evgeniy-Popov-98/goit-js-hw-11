@@ -8,13 +8,17 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const form = document.querySelector('.js-form');
 const input = document.querySelector('.js-input');
 const buttom = document.querySelector('.js-button');
-const gallery = document.querySelector('.js-gallery');
+const gallery = document.querySelector('.gallery');
+const loader = document.querySelector('.loader');
 
 form.addEventListener('submit', creatGallery);
 
 function creatGallery(event) {
   event.preventDefault();
   const infoSearch = form.elements.text.value.trim();
+  form.elements.text.value = '';
+  loader.removeAttribute('hidden');
+  removeGallery();
   if (infoSearch) {
     getImages(infoSearch);
   } else {
@@ -23,6 +27,13 @@ function creatGallery(event) {
       message:
         'Sorry, there are no images matching your search query. Please try again!',
     });
+  }
+}
+
+function removeGallery() {
+  const galleryItem = document.querySelectorAll('.gallery-item');
+  for (let i = 0; i < galleryItem.length; i++) {
+    galleryItem[i].remove();
   }
 }
 
@@ -38,7 +49,17 @@ function getImages(infoSearch) {
         throw myError;
       }
     })
-    .then(resolt => renderImages(resolt.hits))
+    .then(resolt => {
+      if (resolt.hits.length !== 0) {
+        renderImages(resolt.hits);
+      } else {
+        iziToast.error({
+          position: 'topRight',
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+        });
+      }
+    })
     .catch(err => console.log(err.message));
 }
 
@@ -59,12 +80,15 @@ function imageTemplate(img) {
 }
 
 function renderImages(images) {
+  loader.setAttribute('hidden', '');
   const markup = images.map(imageTemplate).join('');
   gallery.innerHTML = markup;
-}
 
-let galleryModalWindow = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-  captionDelay: 250,
-});
+  let galleryModalWindow = new SimpleLightbox('.gallery-link', {
+    captionsData: 'alt',
+    captionPosition: 'bottom',
+    captionDelay: 250,
+  });
+
+  galleryModalWindow.refresh();
+}

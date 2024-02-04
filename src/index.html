@@ -15,14 +15,15 @@
 	<main>
 		<section class="section-form">
 			<form class="form-create-img js-form">
-				<input class="input js-input" type="text" name="text">
+				<input class="input js-input" type="text" name="text" placeholder="Search images...">
 				<button class="button js-button" type="submit">Search</button>
 			</form>
 		</section>
 
 		<section class="section-gallery">
 			<div class="container-gallery">
-				<ul class="gallery js-gallery"></ul>
+				<span class="loader" hidden></span>
+				<ul class="gallery"></ul>
 			</div>
 		</section>
 	</main>
