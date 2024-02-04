@@ -44,14 +44,16 @@ function getImages(infoSearch) {
 
 function imageTemplate(img) {
   return `
-			  <li class="gallery-item">
-			  <a class="gallery-link" href=${img.largeImageURL}>
-				<img class="gallery-image" src=${img.previewURL} alt="${img.tags}" />
-				<div class="container-text"><h3 class="titel-text">Likes</h3><p class="text">${img.likes}</p></div>
-				<div class="container-text"><h3 class="titel-text">Views</h3><p class="text">${img.views}</p></div>
-				<div class="container-text"><h3 class="titel-text">Comments</h3><p class="text">${img.comments}</p></div>
-				<div class="container-text"><h3 class="titel-text">Dowloads</h3><p class="text">${img.downloads}</p></div>
-			  </a>
+			 <li class="gallery-item">
+				<a class="gallery-link" href=${img.largeImageURL}>
+					<img class="gallery-image" src=${img.webformatURL} alt="${img.tags}" />
+				</a>
+				<div class="container">
+					<div class="container-text"><h3 class="titel-text">Likes</h3><p class="text">${img.likes}</p></div>
+					<div class="container-text"><h3 class="titel-text">Views</h3><p class="text">${img.views}</p></div>
+					<div class="container-text"><h3 class="titel-text">Comments</h3><p class="text">${img.comments}</p></div>
+					<div class="container-text"><h3 class="titel-text">Dowloads</h3><p class="text">${img.downloads}</p></div>
+				</div>
 			</li>
 			`;
 }
@@ -60,3 +62,9 @@ function renderImages(images) {
   const markup = images.map(imageTemplate).join('');
   gallery.innerHTML = markup;
 }
+
+let galleryModalWindow = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
